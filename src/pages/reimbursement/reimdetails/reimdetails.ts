@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 
 import { MailingPage } from '../mailing/mailing';
 import { ReviewReason } from '../reviewReason/reviewReason';
-
+import { ToastService } from '../../../providers/util/toast.service';
+import { APP_URL } from '../../../config/config';
 
 @IonicPage()
 @Component({
@@ -11,131 +12,73 @@ import { ReviewReason } from '../reviewReason/reviewReason';
   templateUrl: 'reimdetails.html',
 })
 export class ReimdetailsPage {
+  id: string;
   status: string;
-  statusColor:string;
-  isAuditor:boolean = true;//是否为审核人员
-  buttonName:string;
-  items = [
-    {
-      Immutable: '报销单号',
-      variable:'BX20171445'
-    },
-    {
-      Immutable: '发生时间',
-      variable:'2017-09-05'
-    },
-    {
-      Immutable: '报销金额',
-      variable:'200（元）'
-    },
-    {
-      Immutable: '单据数量',
-      variable:'1'
-    },
-    {
-      Immutable: '地区',
-      variable:'广州'
-    },
-    {
-      Immutable: '项目名称',
-      variable:'高薪企业资质'
-    },
-    {
-      Immutable: '负责人',
-      variable:'孟小宝'
-    },
-    {
-      Immutable: '当天任务',
-      variable:'企业文化宣传'
-    },
-    {
-      Immutable: '一级科目',
-      variable:'营业外支出'
-    },
-    {
-      Immutable: '二级科目',
-      variable:'罚款'
-    },
-    {
-      Immutable: '三级科目',
-      variable:'交通罚款'
-    },
-    {
-      Immutable: '参与人',
-      variable:'孟小宝'
-    },{
-      Immutable: '是否有发票',
-      variable:'有'
-    },
-    {
-      Immutable: '无发票说明',
-      variable:'无'
-    },
-    {
-      Immutable: '补充说明',
-      variable:'请看大屏幕'
-    }
-  ];
-
-  posts = [
-    {
-      Immutable: '收件人',
-      variable:'王博文'
-    },
-    {
-      Immutable: '寄件时间',
-      variable:'2017-08-21'
-    },
-    {
-      Immutable: '地址',
-      variable:'广东省广州市天河区冠达商务中心112'
-    },
-    {
-      Immutable: '备注',
-      variable:'收到货记得发短信给我'
-    }
-  ];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.status = navParams.get('name');
-    switch(this.status){
-          case '待审核':
+  buttonStatus: string;
+  statusColor: string;
+  isAuditor: boolean = true;//是否为审核人员
+  buttonName: string;
+  data: any = {};
+  posts: any = [];
+  isTicketCondition: string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: ToastService, public modalCtrl: ModalController, public alertCtrl: AlertController) {
+    this.id = navParams.get('id');
+    this.status = navParams.get('value');
+    this.buttonStatus = navParams.get('name');
+    this.http.get(APP_URL + `phoneReimburse/v1/info/reim/${this.id}/${this.buttonStatus}`)
+      .then(res => {
+        this.data = res.data;
+        switch (this.data.reimPhoneShowStatus) {
+          case 'GOSEND':
             this.statusColor = 'orange';
-            this.buttonName = this.isAuditor? '去寄件':'去审核';
+            this.buttonName = '去寄件';
             break;
-          case '待分析':
+          case 'GOAUDIT':
+            this.statusColor = 'danger';
+            this.buttonName = '去审核';
+            break;
+          case 'GOANALISIS':
             this.statusColor = 'danger';
             this.buttonName = '去分析';
             break;
-          case '待核对':
-            this.statusColor = 'green';
-            this.buttonName = '核对有误';
-            break;
-          case '待核对':
-            this.statusColor = 'green';
-            this.buttonName = '去付款';
-            break;
-          case '已报销':
-            this.statusColor = 'blue';
-            break;
-          case '待解冻':
-            this.statusColor = 'light';
+          case 'WAITTHAWEDIT':
+            this.statusColor = 'orange';
             this.buttonName = '重新编辑提交';
             break;
         }
+      })
   }
 
-  send(){
-    this.navCtrl.push('MailingPage');
-  }
   itemReason() {
-    this.navCtrl.push('ReviewReason');
+    this.navCtrl.push('ReviewReason', { id: this.id });
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ReimdetailsPage');
+
   }
-  buttonFn(status:string):void {
-    if(status == '待还款'){
-      this.navCtrl.push('BorrowReturnPage');
+  buttonFn(status: string, reimPhoneShowStatus: string, num: number): void {
+    if (status == 'WAITAUDIT') {//待审核
+      if (reimPhoneShowStatus == 'GOSEND') {
+        this.navCtrl.push('MailingPage', { id: this.id, isTicket: this.data.ticketCondition });
+      } else if (reimPhoneShowStatus = "GOAUDIT") {
+        this.navCtrl.push('ReimAuditopinonPage', { id: this.id });
+      } else {
+        this.navCtrl.push('ReimdetailsPage', { id: this.id, name: this.buttonStatus, value: this.status });
+      }
+    } else if (status == 'WAITANALISIS') {//待分析
+      if (reimPhoneShowStatus == 'GOANALISIS') {
+        this.navCtrl.push('ReimAnalisisPage', { id: this.id });
+      }
+    } else if (status == 'WAITCHECK') {//待核对
+      if (reimPhoneShowStatus == 'GOCHECK') {
+        if (num == 1) {
+          this.navCtrl.push('Verification', { id: this.id });
+        } else {
+          this.navCtrl.push('Payment', { id: this.id });
+        }
+      }
+    } else if (status == 'WAITTHAW') {//待解冻
+      this.navCtrl.push('ApplyreimbursementPage', { id: this.id, name: 'WAITTHAW' })
     }
   }
+
 }

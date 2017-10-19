@@ -1,47 +1,31 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ToastService } from '../../../providers/util/toast.service';
+import { APP_URL } from '../../../config/config';
 
-
-/**
- * Generated class for the MailingPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-reviewReason',
   templateUrl: 'reviewReason.html',
 })
 export class ReviewReason {
-
-  items = [
-    {
-      time:'2017-09-11',
-      description:'审核通过原因:符合标准符合标准符<br/>审核通过原因1:合标准符合标准符合标准符合标准'
-    },
-    {
-      time:'2017-09-08',
-      description:'分析通过原因:符合标准'
-    },
-    {
-      time:'2017-09-06',
-      description:'核对无误:已报销200元'
-    },
-    {
-      time:'2017-09-02',
-      description:'核对无误:已报销200元'
-    }
-  ];
+  id: string;
+  data: any;
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
-    public alertCtrl: AlertController
-    ) {
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: ToastService
+  ) {
+    this.id = navParams.get('id');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MailingPage');
+    this.http.get(APP_URL + `phoneReimburse/v1/reimAudit/reason/${this.id}`)
+      .then(res => {
+        if (JSON.stringify(res.data) !== "{}") {
+          this.data = res.data;
+        }
+      })
   }
 
 

@@ -1,10 +1,9 @@
-
 <ion-header>
 
   <ion-navbar color="energy">
-    <ion-title>寄件</ion-title>
+    <ion-title class="toCenter">寄件</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="confirm()" class="sure">确认</button>
+      <button ion-button class="submit" (click)="confirm()">确认</button>
     </ion-buttons>
   </ion-navbar>
 
@@ -13,42 +12,31 @@
 <ion-content id="post">
   <ion-list>
     <ion-item>
-        <ion-label>收件人</ion-label>
-        <ion-select [(ngModel)]="person" interface="popover">
-          <ion-option value="胡歌">胡歌</ion-option>
-          <ion-option value="王博文">王博文</ion-option>
-          <ion-option value="黄焕来">黄焕来</ion-option>
-          <ion-option value="黎贵钦">黎贵钦</ion-option>
-          <ion-option value="黄迪娜">黄迪娜</ion-option>
-          <ion-option value="胡程威">胡程威</ion-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label>寄件时间</ion-label>
-        <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="sendTime" cancelText="取消" doneText="确定"></ion-datetime>
-      </ion-item>
-      <ion-item>
-          <ion-label>地区</ion-label>
-          <ion-select [(ngModel)]="area" okText="确定" cancelText="取消">
-              <ion-option value="北京">北京</ion-option>
-              <ion-option value="深圳">深圳</ion-option>
-              <ion-option value="广州">广州</ion-option>
-              <ion-option value="湛江">湛江</ion-option>
-              <ion-option value="江门">江门</ion-option>
-              <ion-option value="佛山">佛山</ion-option>
-            </ion-select>
-          <!-- <ion-multi-picker item-content [multiPickerColumns]="simpleColumns"></ion-multi-picker> -->
-      </ion-item>
-      <ion-item id="adress">
-        <ion-label>详细地址</ion-label>
-        <ion-input type="text" placeholder="请输入详细地址" class="input-address"></ion-input>
-      </ion-item>
-      <ion-item id="remarks">
-          <ion-label>备注</ion-label>        
-      </ion-item>
-      <ion-item id="block">
-        <ion-textarea placeholder="请输入备注" class="textrea"></ion-textarea>
-      </ion-item>    
+      <ion-label>收件人</ion-label>
+      <ion-select [(ngModel)]="paramObj.sendRecevier" placeholder="请选择收件人" interface="action-sheet" okText="确定" cancelText="取消">
+        <ion-option *ngFor="let item of lenderList">{{item}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>寄件时间</ion-label>
+      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="paramObj.sendDate" doneText="确定" cancelText="取消"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>地区</ion-label>
+      <ion-select [(ngModel)]="paramObj.receiveArea" okText="确定" cancelText="取消">
+        <ion-option *ngFor="let item of areaList">{{item}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item id="adress">
+      <ion-label>详细地址</ion-label>
+      <ion-input type="text" [(ngModel)]="paramObj.receiveAddr" placeholder="请输入详细地址" class="input-address"></ion-input>
+    </ion-item>
+    <ion-item id="remarks">
+      <ion-label>备注</ion-label>
+    </ion-item>
+    <ion-item id="block">
+      <ion-textarea [(ngModel)]="paramObj.sendCondition" placeholder="请输入备注" class="textrea"></ion-textarea>
+    </ion-item>
   </ion-list>
-    
+
 </ion-content>

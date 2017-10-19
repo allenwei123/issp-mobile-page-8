@@ -4,9 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'color',
 })
 export class ColorPipe implements PipeTransform {
-  /**
-   * Takes a value and makes it lowercase.
-   */
+  
   transform(value: string, ...args) {
     let result :string;
     switch(value){
@@ -27,6 +25,16 @@ export class ColorPipe implements PipeTransform {
           break;
         case 'WAITTHAW'://待解冻
           result = 'grey'
+          break;
+        //报销
+        case 'WAITANALISIS'://待分析
+          result = 'red'
+          break;
+        case 'WAITCHECK'://待核对
+          result = 'green'
+          break;
+        case 'HASREIM'://已报销
+          result = 'blue'
           break;
       }
     return result;

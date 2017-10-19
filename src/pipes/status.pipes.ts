@@ -25,6 +25,21 @@ export class StatusPipe {
         case 'WAITTHAW'://待解冻
             result = '待解冻'
             break;
+        case 'WAITANALISIS':
+            result = '待分析'
+            break;
+        case 'WAITCHECK':
+            result = '待核对'
+            break;
+        case 'HASREIM':
+            result = '已报销'
+            break;
+        case 'ALL':
+            result = '全部'
+            break;
+        default :
+            result = value;
+            break;
         }
     return result;
   }

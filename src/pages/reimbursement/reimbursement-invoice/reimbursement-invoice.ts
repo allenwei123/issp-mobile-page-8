@@ -21,7 +21,7 @@ export class ReimbursementInvoice {
     console.log('ionViewDidLoad ReimbursementInvoice');
   }
 
-  complete(){
+  complete() {
     this.navCtrl.push(ReimbursementPage);
   }
 }
