@@ -113,12 +113,8 @@ export class ApplyborrowmoneyPage {
           handler: () => {
             this.camera.getPicture(this.options).then((imageData) => {
               let b:any = {id:this.Iamges.length,url:''};
-<<<<<<< HEAD
               // b.url = 'data:image/png;base64,'+imageData;
               b.url = imageData;
-=======
-              b.url = 'data:image/png;base64,'+imageData;
->>>>>>> team/master
               this.Iamges.push(b);
             });
           }
@@ -128,17 +124,10 @@ export class ApplyborrowmoneyPage {
             var opt = { maximumImagesCount:9,outputType:0 };
             this.imagePicker.getPictures(opt).then((results)=>{
               for (var i = 0; i < results.length; i++) {
-<<<<<<< HEAD
                 let b:any = {id:this.Iamges.length,url:''}; 
                 b.url = results[i];
                 this.Iamges.push(b);
               } 
-=======
-                let b:any = {id:this.Iamges.length,url:''};
-                b.url = results[i];
-                this.Iamges.push(b);
-              }  
->>>>>>> team/master
             });
           }
         },{
@@ -154,31 +143,7 @@ export class ApplyborrowmoneyPage {
   }
   
   showBig(url:string){
-<<<<<<< HEAD
     this.photoViewer.show(url, '我的图片展示', {share: false});
-=======
-    if(url){
-      this.bigImg = url;
-      console.log(this.bigImg)
-    }
-  
-
-    let o:any = {id:this.Iamges.length,url:'assets/imgs/userImage2.png'};
-    
-    // this.camera.getPicture(this.options).then((imageData) => {
-    //   let base64Image = 'data:image/jpeg;base64,' + imageData;
-    //   this.croSrc = 'data:image/png;base64,'+imageData;
-    //   o.url = 'data:image/png;base64,'+imageData;
-    //   this.Iamges.push(o);
-    // });
-    var opt = { maxImagesCount:1, width:100, height:100, quality:50 }; 
-    this.imagePicker.getPictures(opt).then((results)=>{
-      for (var i = 0; i < results.length; i++) {
-        o.url = 'data:image/png;base64,'+results[i];;
-        this.Iamges.push(o);
-      } 
-    });
->>>>>>> team/master
   }
   delImage(val:number) :void{
     let actionSheet = this.actionSheetCtrl.create({

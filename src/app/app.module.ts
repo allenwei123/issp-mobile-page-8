@@ -81,7 +81,6 @@ import { PROVIDERS } from './imports';
     Geolocation,
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ContactsProvider
   ]
 })
 export class AppModule {}
