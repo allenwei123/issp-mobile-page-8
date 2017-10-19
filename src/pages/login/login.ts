@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,AlertController,LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { ToastService } from '../../providers/util/toast.service';
 import { Welcome } from '../welcome/welcome';
@@ -18,12 +18,17 @@ export class LoginPage {
     public storage: Storage,
     public alertCtrl: AlertController,
     public http : ToastService,
-    public globalData :GlobalData) {
+    public globalData :GlobalData,
+    public loadingCtrl: LoadingController) {
   }
   ionViewDidLoad() {
     
   }
   login (name:string,pas: string) {
+    let loader = this.loadingCtrl.create({
+      content: "请稍等..."
+    });
+    loader.present();
     this.http.getUser(`v1/login?account=${name}&password=${pas}`)
     .then(res => {
       if(res.code == 0){
@@ -31,6 +36,8 @@ export class LoginPage {
         this.storage.set('token',res.data);
         this.storage.get('token').then((val) => {
           this.globalData.token = val;
+          localStorage.setItem('token',res.data);//持久保存在本地
+          loader.dismiss();
           this.navCtrl.push(Welcome);  
         })
       }else {

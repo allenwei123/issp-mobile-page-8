@@ -35,7 +35,7 @@ export class Welcome {
       },
       {
         title:'设置',
-        page:'SettingPage'
+        page:'ContactPage'
       }
     ];
   }
@@ -47,9 +47,9 @@ export class Welcome {
 
   ionViewDidLoad() {
 
-    // this.storage.get('userName').then(val =>{
+     this.storage.get('userName').then(val =>{
   
-      // this.temp_userName = val ;
+      this.temp_userName = val ;
       this.temp_userName = 'admin' ;
       if(this.temp_userName){
         
@@ -61,7 +61,7 @@ export class Welcome {
           
           });
       }
-    // });      
+    });         
     
   }
 

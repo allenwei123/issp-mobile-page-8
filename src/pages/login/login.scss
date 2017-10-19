@@ -1,5 +1,7 @@
 page-login {
     #content {
+        background:white url('/assets/imgs/login-footer.png')no-repeat fixed bottom;
+        background-size: 100% 20%;
         .title {
             padding:7.875rem 0 6.5rem 0;
             text-align: center;
@@ -40,17 +42,5 @@ page-login {
                 }
             }
         }
-    }
-    ion-footer {
-        i {
-            width: 100%;
-            img {
-                width:100%;
-                margin-bottom: -5px;
-            }
-        }
-    }
-    .footer-md::before {
-        background-image:none;
     }
 }

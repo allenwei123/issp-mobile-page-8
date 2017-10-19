@@ -81,36 +81,6 @@ page-contacts {
             }
         
         }
-
-        .modal {           
-            top: 50%;
-            left: 50%;
-            z-index: 100;
-            position: fixed;
-        
-            pointer-events: none;
-        
-            width: $modal-size;
-            height: $modal-size;
-            line-height: $modal-size;
-            margin-left: -($modal-size * 0.5);
-            margin-top: -($modal-size * 0.5);
-        
-            color: #fff;
-            font-size: 3em;
-            text-align: center;
-            border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.52);
-            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.16);
-        
-            transition: opacity .5s;
-            opacity: 0;
-        
-            &.show {
-                opacity: 1
-            }
-        
-        }
     }
     #toolbar{
         &.segment-ios .segment-button{

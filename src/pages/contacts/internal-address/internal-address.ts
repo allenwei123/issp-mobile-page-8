@@ -33,7 +33,7 @@ export class InternalAddress {
           text: '呼叫',
           handler: data => {
             this.callNumber.callNumber(this.detailData.phone, true)
-              .then(() => console.log('Launched dialer!'))
+              .then(() => alert(12312))
               .catch(() => console.log('Error launching dialer'));
           }
         },

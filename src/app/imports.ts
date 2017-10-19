@@ -17,6 +17,7 @@ import { CustomerPipe } from '../pipes/customer.pipes'
 import { ToastService } from '../providers/util/toast.service';
 import { GlobalData } from '../providers/GlobalData';
 import { ContactsProvider } from '../providers/contacts';
+import { NativeService } from '../providers/NativeService';
 
 export const COMPONENTS = [
     AccordionListComponent,
@@ -36,5 +37,6 @@ export const PIPES = [
 export const PROVIDERS = [
     ToastService,
     GlobalData,
-    ContactsProvider
+    ContactsProvider,
+    NativeService
 ];

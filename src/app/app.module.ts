@@ -8,12 +8,13 @@ import { Geolocation } from '@ionic-native/geolocation';//获取定位
 import { ImagePicker } from '@ionic-native/image-picker';//获取图片
 import { IonicStorageModule } from '@ionic/storage';
 import { CallNumber } from '@ionic-native/call-number';//拨打电话号码
+import { PhotoViewer } from '@ionic-native/photo-viewer';//全屏显示图像
+import { InAppBrowser } from '@ionic-native/in-app-browser';//打开浏览器
 
-import { Welcome } from '../pages/welcome/welcome';
+// import { Welcome } from '../pages/welcome/welcome';
+import { WelcomeModule } from '../pages/welcome/welcome.module';
 import { LoginPageModule } from '../pages/login/login.module';
-import { Signup } from '../pages/signup/signup';
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { SettingPage } from '../pages/setting/setting';
@@ -29,22 +30,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { MultiPickerModule } from 'ion-multi-picker';
 import { PROVIDERS } from './imports';
 
-
-//通讯录
-import { ContactsPageModule } from '../pages/contacts/contacts.module';
-import { ToastService } from '../providers/util/toast.service';
-import { HttpModule } from '@angular/http';
-import { Contacts } from '../providers/contacts';
-
-// modals
-// import { ExternalAddress as  ModalContentPage } from '../pages/contacts/external-address/external-address';
 @NgModule({
   declarations: [
     MyApp,
-    Welcome,
-    Signup,
     AboutPage,
-    ContactPage,
     HomePage,
     TabsPage
   ], 
@@ -53,6 +42,7 @@ import { Contacts } from '../providers/contacts';
     BrowserModule,
     IonicModule.forRoot(MyApp,{
       backButtonText:'',
+      cancelButton:' 取消'
     }),
     IonicStorageModule.forRoot({
       name: '__mydb',
@@ -60,7 +50,7 @@ import { Contacts } from '../providers/contacts';
     }),
     SettingPageModule,
     ReimbursementPageModule,
-
+    WelcomeModule,
     MultiPickerModule ,
     SharedModule,
     ContactsPageModule,
@@ -69,10 +59,7 @@ import { Contacts } from '../providers/contacts';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    Welcome,
-    Signup,
     AboutPage,
-    ContactPage,
     HomePage,
     TabsPage,
     SettingPage,
@@ -85,7 +72,9 @@ import { Contacts } from '../providers/contacts';
     ImagePicker,
     Camera,
     CallNumber,
+    PhotoViewer,
     Geolocation,
+    InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

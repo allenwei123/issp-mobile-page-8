@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController,ActionSheetController  } from 'ionic-angular';
 import { ToastService } from '../../../providers/util/toast.service';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Geolocation } from '@ionic-native/geolocation';
 import { ImagePicker } from '@ionic-native/image-picker';//获取图片
 import { APP_URL } from '../../../config/config';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 @IonicPage()
 @Component({
@@ -21,24 +22,13 @@ export class ApplyborrowmoneyPage {
   secondList: any = [];
   thirdList: any = [];
   explaisList: any= [];//说明
-  croSrc :string;
+  bigImg :string;
   Iamges:any = [
-    {
-      id: 1,
-      url: 'assets/imgs/userImage1.png'
-    },
-    {
-      id: 2,
-      url: 'assets/imgs/userImage1.png'
-    },
-    {
-      id: 3,
-      url: 'assets/imgs/userImage2.png'
-    }
-  ]
+    // {id:1,url:'assets/imgs/userImage2.png'},{id:1,url:'assets/imgs/123.png'}
+    ];
   options: CameraOptions = {
     quality: 100,
-    destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.NATIVE_URI,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE
   }
@@ -48,8 +38,9 @@ export class ApplyborrowmoneyPage {
     public http:ToastService,
     public alertCtrl: AlertController,
     private camera: Camera,
-    private geolocation: Geolocation,
-    private imagePicker: ImagePicker
+    private imagePicker: ImagePicker,
+    public actionSheetCtrl: ActionSheetController,
+    private photoViewer: PhotoViewer
   )
      {
   }
@@ -75,40 +66,6 @@ export class ApplyborrowmoneyPage {
           this.thirdList = res.data;
         })
     }
-    
-    this.geolocation.getCurrentPosition().then((resp) => {
-        // resp.coords.latitude
-        console.log("经度："+ resp.coords.latitude+','+'纬度：'+resp.coords.longitude);
-        let confirm = this.alertCtrl.create({
-          title: '消息提示',
-          message: "经度："+ resp.coords.latitude,
-          buttons: [
-              {
-                text: '确认',
-                handler: () => {
-                  
-                }
-              }
-            ]
-          });
-          confirm.present();
-        // resp.coords.longitude
-      }).catch((error) => {
-        console.log('Error getting location', error);
-        let confirm = this.alertCtrl.create({
-          title: '消息提示',
-          message: error,
-          buttons: [
-              {
-                text: '确认',
-                handler: () => {
-                  
-                }
-              }
-            ]
-          });
-          confirm.present();
-      });
   }
   areaCh (){
     this.http.get(APP_URL+`phoneApplylend/v1/phone/getPGroupList`,{area:this.paramObj.area})
@@ -146,25 +103,65 @@ export class ApplyborrowmoneyPage {
     }
   }
   addImage() {
-    let o:any = {id:this.Iamges.length,url:'assets/imgs/userImage2.png'};
-    
-    // this.camera.getPicture(this.options).then((imageData) => {
-    //   let base64Image = 'data:image/jpeg;base64,' + imageData;
-    //   this.croSrc = 'data:image/png;base64,'+imageData;
-    //   o.url = 'data:image/png;base64,'+imageData;
-    //   this.Iamges.push(o);
-    // });
-    var opt = { maxImagesCount:1, width:100, height:100, quality:50 }; 
-    this.imagePicker.getPictures(opt).then((results)=>{
-      for (var i = 0; i < results.length; i++) {
-        o.url = 'data:image/png;base64,'+results[i];;
-        this.Iamges.push(o);
-      } 
-    });
+    let actionSheet = this.actionSheetCtrl.create({
+      title:'选择照片形式',
+      buttons: [
+        {
+          text: '拍摄',
+          handler: () => {
+            this.camera.getPicture(this.options).then((imageData) => {
+              let b:any = {id:this.Iamges.length,url:''};
+              // b.url = 'data:image/png;base64,'+imageData;
+              b.url = imageData;
+              this.Iamges.push(b);
+            });
+          }
+        },{
+          text: '从手机相册选择',
+          handler: () => {
+            var opt = { maximumImagesCount:9,outputType:0 };
+            this.imagePicker.getPictures(opt).then((results)=>{
+              for (var i = 0; i < results.length; i++) {
+                let b:any = {id:this.Iamges.length,url:''}; 
+                b.url = results[i];
+                this.Iamges.push(b);
+              } 
+            });
+          }
+        },{
+          text: '取消',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    })
+    actionSheet.present();
   }
-
+  
+  showBig(url:string){
+    this.photoViewer.show(url, '我的图片展示', {share: false});
+  }
   delImage(val:number) :void{
-    this.Iamges.splice(val,1);
+    let actionSheet = this.actionSheetCtrl.create({
+      title:'是否删除凭证',
+      buttons: [
+        {
+          text: '确认删除',
+          handler: () => {
+            this.Iamges.splice(val,1);
+          }
+        },{
+          text: '取消',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    })
+    actionSheet.present();
   }
   //提交
   submit() :void{
