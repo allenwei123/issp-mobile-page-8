@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastService } from '../../providers/util/toast.service';
 import { Signup } from '../signup/signup';
+
 import { Storage } from '@ionic/storage';
 import { HOME } from '../../config/config';
 
@@ -17,12 +18,14 @@ export class Welcome {
   userName:string="admin";
   empNumer: string;
   temp_userName:string;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: ToastService, public storage: Storage) {
+
+  constructor(public navCtrl: NavController,public navParams: NavParams, public http: ToastService, public storage: Storage) {
+
     this.rootPage = 'Welcome';
     this.items = [
       {
         title:'报销管理',
-        page:'ReimbursementPage' 
+        page:'ReimbursementPage'
       },
       {
         title:'借款管理',
@@ -34,12 +37,16 @@ export class Welcome {
         page:'ContactsPage'
       },
       {
+        title:'公告管理',
+        page:'AnnouncementPage'
+      },
+      {
         title:'设置',
         page:'ContactPage'
       }
     ];
   }
-  
+
   itemTapped(event, item) {
     this.navCtrl.push(item.page);
   }
@@ -47,7 +54,7 @@ export class Welcome {
 
   ionViewDidLoad() {
 
-     this.storage.get('userName').then(val =>{
+    this.storage.get('userName').then(val =>{
   
       this.temp_userName = val ;
       this.temp_userName = 'admin' ;
@@ -61,7 +68,7 @@ export class Welcome {
           
           });
       }
-    });         
+    });            
     
   }
 

@@ -14,8 +14,6 @@ export class ContactsProvider {
     constructor(public http: Http) {
        
     }
-
-
     /**
      * Get contacts data
      * @returns {Promise<TResult|T>}

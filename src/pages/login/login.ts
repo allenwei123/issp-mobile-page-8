@@ -32,7 +32,8 @@ export class LoginPage {
     this.http.getUser(`v1/login?account=${name}&password=${pas}`)
     .then(res => {
       if(res.code == 0){
-        this.storage.set('userName',name);
+        localStorage.setItem('userName',name);
+        localStorage.setItem('password',pas);
         this.storage.set('token',res.data);
         this.storage.get('token').then((val) => {
           this.globalData.token = val;

@@ -22,6 +22,7 @@ import { SettingPageModule } from '../pages/setting/setting.module';
 import { ReimbursementPage } from '../pages/reimbursement/reimbursement';
 import { ReimbursementPageModule } from '../pages/reimbursement/reimbursement.module';
 import { SharedModule } from './shared.module';
+
 //通讯录
 import { ContactsPageModule } from '../pages/contacts/contacts.module';
 
@@ -43,6 +44,10 @@ import { PROVIDERS } from './imports';
     IonicModule.forRoot(MyApp,{
       backButtonText:'',
       cancelButton:' 取消'
+    }),
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+         driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
     IonicStorageModule.forRoot({
       name: '__mydb',
@@ -76,6 +81,7 @@ import { PROVIDERS } from './imports';
     Geolocation,
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ContactsProvider
   ]
 })
 export class AppModule {}

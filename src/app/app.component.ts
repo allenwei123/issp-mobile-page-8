@@ -9,6 +9,7 @@ import { ToastService } from '../providers/util/toast.service';
 import { GlobalData } from '../providers/GlobalData';
 import { NativeService } from '../providers/NativeService';
 
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -28,7 +29,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
-      splashScreen.hide();
+      splashScreen.hide()
       this.globalData.token = localStorage.getItem('token');
       let url = this.nativeHttp.isMobile() ? 'https://lendreimbursement.issp.bjike.com:8080/' : '/';
       this.http.get(`${url}phoneApplylend/v1/listAll`,{lendPhoneSelectStatus:'ALL',page:1})
